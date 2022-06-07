@@ -32,7 +32,6 @@ app.get('/', (req, res) => {
     res.send('<h2>Express is runnings!</h2>');
 });
 app.all('/Api/*', (req, res, next) => {
-    //console.log('authentication code here!');
     //next();
     const authHeader = req.headers.authorization;
     if (authHeader) {
@@ -56,8 +55,6 @@ app.post('/Login', (req, res) => {
             User.findOne({ username: iUsername, password: iPwd }, (err, doc) => {
                 if (err)
                     return res.json({ Status: '500', Data: err });
-                console.log(doc);
-                console.log(doc.length);
                 if (doc != null) {
                     const accessToken = jwt.sign({ username: iUsername, issueTime: new Date() }, accessTokenSecret);
                     return res.send({ Status: '200', Data: 'Success!', Token: accessToken });
@@ -127,7 +124,6 @@ app.post('/Api/todo', (req, res) => {
         if (id) {
             Todo.findByIdAndUpdate({ _id: id }, { title: todo.title, description: todo.description }, { upsert: false }, (err, doc) => {
                 if (err) {
-                    console.log(err);
                     return res.send({ Status: '500', Data: err });
                 }
                 else {
@@ -138,7 +134,6 @@ app.post('/Api/todo', (req, res) => {
         else {
             todo.save((err, doc) => {
                 if (err) {
-                    console.log(err);
                     return res.send({ Status: '500', Data: err });
                 }
                 else {
@@ -166,7 +161,6 @@ app.get('/Api/todo', (req, res) => {
 });
 app.get('/Api/todo/:id', (req, res) => {
     try {
-        console.log(req.params, 'get');
         Todo.findOne({ _id: req.params.id }).exec((err, doc) => {
             if (err)
                 return res.send({ Status: '500', Data: err });
@@ -180,7 +174,6 @@ app.get('/Api/todo/:id', (req, res) => {
 });
 app.delete('/Api/todo/:id', (req, res) => {
     try {
-        console.log(req.params);
         Todo.deleteOne({ _id: req.params.id }).exec((err, doc) => {
             if (err)
                 return res.send({ Status: '500', Data: err });

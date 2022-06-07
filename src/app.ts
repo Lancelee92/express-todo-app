@@ -36,8 +36,7 @@ app.get('/', (req, res) => {
     res.send('<h2>Express is runnings!</h2>');
 });
 
-app.all('/Api/*', (req, res, next) => {
-    //console.log('authentication code here!');
+app.all('/Api/*', (req, res, next) => {    
     //next();
     const authHeader = req.headers.authorization;
 
@@ -66,8 +65,6 @@ app.post('/Login', (req, res) => {
                 if (err)
                     return res.json({ Status: '500', Data: err });
 
-                console.log(doc);
-                console.log(doc.length);
                 if (doc != null) {
                     const accessToken = jwt.sign({ username: iUsername, issueTime: new Date() }, accessTokenSecret);
 
@@ -149,7 +146,7 @@ app.post('/Api/todo', (req, res) => {
 
             Todo.findByIdAndUpdate({ _id: id }, { title: todo.title, description: todo.description }, { upsert: false }, (err, doc) => {
                 if (err) {
-                    console.log(err);
+
                     return res.send({ Status: '500', Data: err });
                 }
                 else {
@@ -161,7 +158,7 @@ app.post('/Api/todo', (req, res) => {
                         
             todo.save((err, doc) => {
                 if (err) {
-                    console.log(err);
+
                     return res.send({ Status: '500', Data: err });
                 }
                 else {
@@ -190,7 +187,7 @@ app.get('/Api/todo', (req, res) => {
 
 app.get('/Api/todo/:id', (req, res) => {
     try {
-        console.log(req.params, 'get')
+
         Todo.findOne({ _id: req.params.id }).exec((err, doc) => {
             if (err)
                 return res.send({ Status: '500', Data: err });
@@ -204,7 +201,7 @@ app.get('/Api/todo/:id', (req, res) => {
 
 app.delete('/Api/todo/:id', (req, res) => {
     try {
-        console.log(req.params)
+ 
         Todo.deleteOne({ _id: req.params.id }).exec((err, doc) => {
             if (err)
                 return res.send({ Status: '500', Data: err });
